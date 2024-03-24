@@ -33,5 +33,9 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0"
   },
-  "homepage": "https://github.com/PeterHassaballah/nexus-analytica-task#readme"
+  "homepage": "https://github.com/PeterHassaballah/nexus-analytica-task#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "tslib": "^2.6.2"
+  }
 }
