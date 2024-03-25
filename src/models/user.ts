@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IUser } from 'src/types/user.interfaces';
+import { IUser } from '../types/user.interfaces';
 const userSchema = new mongoose.Schema<IUser>(
     {
       name: {
@@ -14,20 +14,17 @@ const userSchema = new mongoose.Schema<IUser>(
       },
       email: {
         type: String,
-        required: true,
-        unique: true,
         trim: true,
         lowercase: true,
       },
       password: {
         type: String,
-        required: true,
         trim: true,
         minlength: 8,
         private: true, // used by the toJSON plugin
       },
       age:{
-
+        type:Number,
       },
       active: {
         type: Boolean,

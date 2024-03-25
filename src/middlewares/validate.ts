@@ -1,7 +1,7 @@
 
 import { RequestHandler } from 'express';
 import joi from "joi";
-import pick from "../utils/pick.js";
+import pick from "../utils/pick";
 
 const validate = (schema:any):RequestHandler => (req, res, next) => {
   const validSchema = pick(schema, ["params", "query", "body"]);

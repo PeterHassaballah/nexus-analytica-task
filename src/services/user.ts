@@ -1,16 +1,16 @@
 import User from "../models/user";
 import { FilterQuery } from "mongoose";
-import { IUser } from "src/types/user.interfaces";
-import ApiError from "src/utils/ApiError";
-import QueryOptions from "src/types/globalTypes";
+import { IUser } from "../types/user.interfaces";
+import ApiError from "../utils/ApiError";
+import QueryOptions from "../types/query";
 /**
  * Create a user
  * @param {Object} userBody
  * @returns {Promise<User>}
  */
 export const createUser = async (userBody:IUser) => {
-  
-  return User.create(userBody);
+  const id=Math.floor((Math.random() * 1000) + 1);
+  return User.create({...userBody,id});
 };
 /**
  * Query for users
@@ -67,3 +67,58 @@ export const createUser = async (userBody:IUser) => {
     return user;
   };
   
+  // Calculate the average age of all users
+export const calculateAverageAge = async (): Promise<number | null> => {
+    const aggregateResult: { averageAge: number }[] = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          averageAge: { $avg: '$age' }
+        }
+      }
+    ]);
+
+    if (aggregateResult.length > 0) {
+      return aggregateResult[0].averageAge;
+    } else {
+      throw new ApiError(400,'Error calculating average age:',false);
+    }
+
+};
+
+export const calculateUserStatistics = async (): Promise<{
+  totalUsers: number;
+  totalActive: number;
+  totalInActive: number;
+} | null> => {
+    const aggregateResult: { totalUsers: number; totalActiveUsers: number }[] = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalUsers: { $sum: 1 }, // Count total number of users
+          totalActiveUsers: { $sum: { $cond: { if: "$active", then: 1, else: 0 } } } // Count total number of active users
+        }
+      }
+    ]);
+    if(!aggregateResult){
+      throw new ApiError(400,"Error counting Users",false);
+    }
+
+    if (aggregateResult.length > 0) {
+      return {
+        totalUsers: aggregateResult[0].totalUsers,
+        totalActive: aggregateResult[0].totalActiveUsers,
+        totalInActive: aggregateResult[0].totalUsers -aggregateResult[0].totalActiveUsers
+      };
+    } else {
+      throw new ApiError(404,"DB empty",false);
+    }
+  
+};
+export const createMany = async(payload:any[]):Promise<IUser[]>=>{
+  const newUsers = payload.map(json => new User(json));
+    const savedUsers = await User.insertMany(newUsers);
+    console.log('Users saved:', savedUsers);
+    return savedUsers;
+
+}
