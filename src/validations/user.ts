@@ -1,13 +1,14 @@
 // import { object, string, number, required } from 'joi';
 import joi from "joi";
-import { password, objectId } from "./custom.js";
+import { password, objectId } from "./custom";
 
 export const createUser = {
   body: joi.object().keys({
-    email: joi.string().required().email(),
-    password: joi.string().required().custom(password),
+    email: joi.string().email(),
+    password: joi.string().custom(password),
     name: joi.string().required(),
-    active: joi.boolean(),
+    age:joi.number().required(),
+    active: joi.boolean().required(),
   }),
 };
 

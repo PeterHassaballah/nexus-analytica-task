@@ -1,5 +1,5 @@
 import joi from "joi";
-import { password } from "./custom.js";
+import { password } from "./custom";
 
 export const register = {
   body: joi.object().keys({
