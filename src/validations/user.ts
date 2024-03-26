@@ -18,6 +18,7 @@ export const getUsers = {
     age: joi.number(),
     active:joi.boolean(),
     sortBy: joi.string(),
+    sortOrder: joi.any(),
     limit: joi.number().integer(),
     page: joi.number().integer(),
   }),
